@@ -19,6 +19,7 @@ import (
 )
 
 var year, day int
+var answer, level string
 
 var benchCmd = &cobra.Command{
 	Use:   "bench",
@@ -61,6 +62,30 @@ var buildCmd = &cobra.Command{
 	},
 }
 
+var submitCmd = &cobra.Command{
+	Use:   "submit",
+	Short: "Submit answer",
+	Long:  "Submit answer for a given day, year and level",
+	Args: func(cmd *cobra.Command, args []string) error {
+		if year <= 0 {
+			year = time.Now().Year()
+		}
+		if day <= 0 {
+			if time.Now().Month() == 12 {
+				day = time.Now().Day()
+			} else if time.Now().Month() == 11 && time.Now().Day() == 30 {
+				day = 1
+			} else {
+				return errors.New("invalid day")
+			}
+		}
+		return nil
+	},
+	Run: func(cmd *cobra.Command, args []string) {
+		gen.SubmitDay(year, day, answer, level)
+
+	},
+}
 var genCmd = &cobra.Command{
 	Use:   "gen",
 	Short: "Generate a puzzle",
@@ -83,7 +108,9 @@ var genCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		gen.InitializePackage(year)
 		gen.NewInputFile(year, day)
+		gen.NewProblemFile(year, day)
 		gen.NewPuzzleFile(year, day)
+		gen.NewPuzzleTestFile(year, day)
 		gen.InitializePackage(year)
 		gen.InitializeYearsPackages()
 		gen.NewBenchmarks(year)
@@ -183,6 +210,10 @@ var rootCmd = &cobra.Command{
 func Execute() {
 	rootCmd.PersistentFlags().IntVarP(&year, "year", "y", 0, "year input")
 	rootCmd.PersistentFlags().IntVarP(&day, "day", "d", 0, "day input")
+
+	submitCmd.Flags().StringVarP(&level, "level", "l", "", "")
+	submitCmd.Flags().StringVarP(&answer, "answer", "a", "", "")
+	rootCmd.AddCommand(submitCmd)
 
 	rootCmd.AddCommand(benchCmd)
 	rootCmd.AddCommand(buildCmd)
