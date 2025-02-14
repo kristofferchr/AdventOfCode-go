@@ -83,6 +83,18 @@ func (bb BingoBoard) MarkNumberWhenPresent(drawnNumber string) {
 	}
 }
 
+
+
+
+func parseRowOfBingoNumbers(boardRow string) []BingoNumber {
+	bingoRowNumbersRaw := regexp.MustCompile("\\s+").Split(boardRow, -1)
+	var bingoRowNumbers []BingoNumber
+	for _, number := range bingoRowNumbersRaw {
+		bingoRowNumbers = append(bingoRowNumbers, BingoNumber{value: number})
+	}
+	return bingoRowNumbers
+}
+
 func (p Day04) PartA(lines []string) any {
 	bingoNumbers := strings.Split(lines[0],",")
 	bingoBoardsRaw := lines[2:]
@@ -125,17 +137,6 @@ func (p Day04) PartA(lines []string) any {
 	}
 
 	return 0
-}
-
-
-
-func parseRowOfBingoNumbers(boardRow string) []BingoNumber {
-	bingoRowNumbersRaw := regexp.MustCompile("\\s+").Split(boardRow, -1)
-	var bingoRowNumbers []BingoNumber
-	for _, number := range bingoRowNumbersRaw {
-		bingoRowNumbers = append(bingoRowNumbers, BingoNumber{value: number})
-	}
-	return bingoRowNumbers
 }
 
 func (p Day04) PartB(lines []string) any {

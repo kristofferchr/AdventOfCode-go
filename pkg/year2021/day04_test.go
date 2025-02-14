@@ -38,6 +38,6 @@ func TestDay04(t *testing.T) {
 
 	t.Run("partB", func(t *testing.T) {
 		result := day04.PartB(input)
-		assert.Equal(t, "implement_me", result)
+		assert.Equal(t, 1924, result)
 	})
 }

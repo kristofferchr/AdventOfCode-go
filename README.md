@@ -15,6 +15,7 @@ Run AOCgen via executable: ```./aocgen```
 - **list**: list all years or puzzles in a year
 - **rm**: delete a puzzle and its input
 - **run**: run a puzzle
+- **submit**: submit an answer
 
 ## Generating Code
 
